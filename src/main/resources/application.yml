@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: madness-table
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost/5432/madness}
+    username: ${DB_USER:madness}
+    password: ${DB_USER:madness}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
