@@ -31,3 +31,22 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Secretos y entorno ###
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+application-local.properties
+*.pem
+*.key
+
+### Logs ###
+*.log
+logs/
+
+### Sistema operativo ###
+.DS_Store
+Thumbs.db
+desktop.ini
