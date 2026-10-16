@@ -2,9 +2,9 @@ package com.quinter.madness_table.auth;
 
 import com.quinter.madness_table.auth.user.User;
 import com.quinter.madness_table.auth.user.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
