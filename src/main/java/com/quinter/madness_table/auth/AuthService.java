@@ -13,10 +13,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Transactional
@@ -30,5 +32,20 @@ public class AuthService {
         String hash = passwordEncoder.encode(request.password());
         User user = new User(email, request.displayName().trim(), hash);
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public TokenResponse login(LoginRequest request){
+        String email = request.email().trim().toLowerCase(Locale.ROOT);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(InvalidCreadentialsException::new);
+
+        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())){
+            throw new InvalidCreadentialsException();
+        }
+
+        String token = jwtService.generateToken(user.getId(), user.getEmail());
+        return new TokenResponse(token, "Bearer", jwtService.getExpirationSeconds());
     }
 }
