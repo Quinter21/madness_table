@@ -1,0 +1,19 @@
+### Registro correcto
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "angel@example.com",
+  "displayName": "Angel",
+  "password": "ClaveSegura123"
+}
+
+### Registro inválido (email mal y contraseña corta)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "esto-no-es-un-email",
+  "displayName": "Angel",
+  "password": "123"
+}
