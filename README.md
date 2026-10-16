@@ -15,3 +15,5 @@ Salud: http://localhost:8080/actuator/health
 
 ## Estado
 🚧 En desarrollo. Roadmap: auth → motor de reglas → investigadores → cordura → tiempo real.
+
+@2026 Ángel Quintero. Código publicado con fines de portfolio; todos los derechos reservados.
