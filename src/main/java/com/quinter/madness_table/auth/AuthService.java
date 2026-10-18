@@ -39,10 +39,10 @@ public class AuthService {
         String email = request.email().trim().toLowerCase(Locale.ROOT);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(InvalidCreadentialsException::new);
+                .orElseThrow(InvalidCredentialsException::new);
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())){
-            throw new InvalidCreadentialsException();
+            throw new InvalidCredentialsException();
         }
 
         String token = jwtService.generateToken(user.getId(), user.getEmail());

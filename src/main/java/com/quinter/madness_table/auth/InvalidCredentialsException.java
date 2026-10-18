@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
-public class InvalidCreadentialsException extends RuntimeException {
+public class InvalidCredentialsException extends RuntimeException {
 
-    public InvalidCreadentialsException(){
+    public InvalidCredentialsException(){
         super("Credenciales incorrectas");
     }
 }
