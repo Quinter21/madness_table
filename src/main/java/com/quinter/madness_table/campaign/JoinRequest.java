@@ -39,6 +39,24 @@ public class JoinRequest {
         this.user = user;
     }
 
+    public void approve() {
+        ensurePending();
+        this.status = JoinRequestStatus.APPROVED;
+        this.resolvedAt = Instant.now();
+    }
+
+    public void reject() {
+        ensurePending();
+        this.status = JoinRequestStatus.REJECTED;
+        this.resolvedAt = Instant.now();
+    }
+
+    private void ensurePending() {
+        if(this.status != JoinRequestStatus.PENDING){
+            throw new JoinRequestConflictException("El guardián ya ha respondido a las estrellas");
+        }
+    }
+
     public Long getId() { return id; }
     public Campaign getCampaign() { return campaign; }
     public User getUser() { return user; }
