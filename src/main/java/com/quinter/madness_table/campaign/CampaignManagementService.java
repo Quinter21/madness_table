@@ -48,7 +48,7 @@ public class CampaignManagementService {
         request.approve();
 
         if(memberRepository.existsByCampaignIdAndUserId(campaignId, request.getUser().getId())){
-            throw new JoinRequestConflictException("El usuario ya es miembro");
+            throw new ConflictException("El usuario ya es miembro");
         }
         CampaignMember newMember = memberRepository.save(
                 new CampaignMember(guardian.getCampaign(), request.getUser(), CampaignRole.PLAYER)
@@ -81,7 +81,7 @@ public class CampaignManagementService {
         access.requireGuardian(campaignId, userId);
 
         if(targetUserId.equals(userId)){
-            throw new JoinRequestConflictException("El guardian no puede dejar el plano astral");
+            throw new ConflictException("El guardian no puede dejar el plano astral");
         }
         CampaignMember target = memberRepository.findByCampaignIdAndUserId(campaignId, targetUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("El mortal no se encuentra " +

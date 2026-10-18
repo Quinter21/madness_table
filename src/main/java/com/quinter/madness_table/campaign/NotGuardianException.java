@@ -1,8 +1,10 @@
 package com.quinter.madness_table.campaign;
 
-public class NotGuardianException extends RuntimeException {
-    public NotGuardianException() {
+import com.quinter.madness_table.common.error.ApiException;
+import org.springframework.http.HttpStatus;
 
-        super("Solo el guardián tiene el poder de acceder a este mundo");
+public class NotGuardianException extends ApiException {
+    public NotGuardianException() {
+        super(HttpStatus.FORBIDDEN, "Solo el guardián tiene el poder de acceder a este mundo");
     }
 }

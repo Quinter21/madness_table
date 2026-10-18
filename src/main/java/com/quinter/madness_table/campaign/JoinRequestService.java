@@ -34,12 +34,12 @@ public class JoinRequestService {
                 .orElseThrow(InvalidInviteCodeException::new);
 
         if (memberRepository.existsByCampaignIdAndUserId(campaign.getId(), userId)){
-            throw new JoinRequestConflictException("Ya eres miembro de esta campaña");
+            throw new ConflictException("Ya eres miembro de esta campaña");
         }
 
         if (joinRequestRepository.existsByCampaignIdAndUserIdAndStatus(campaign.getId(),
                 userId, JoinRequestStatus.PENDING)){
-            throw new JoinRequestConflictException("Ya tienes una solicitud pendiente para esta campaña");
+            throw new ConflictException("Ya tienes una solicitud pendiente para esta campaña");
         }
 
         User user = userRepository.getReferenceById(userId);

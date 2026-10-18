@@ -1,12 +1,13 @@
 package com.quinter.madness_table.campaign;
 
+import com.quinter.madness_table.common.error.ApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class CampaignNotFoundException extends RuntimeException{
+public class CampaignNotFoundException extends ApiException {
 
     public CampaignNotFoundException(Long id){
-        super("Campaña no encontrada " + id);
+        super(HttpStatus.NOT_FOUND, "Campaña no encontrada " + id);
     }
 }

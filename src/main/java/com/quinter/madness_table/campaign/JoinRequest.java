@@ -53,7 +53,7 @@ public class JoinRequest {
 
     private void ensurePending() {
         if(this.status != JoinRequestStatus.PENDING){
-            throw new JoinRequestConflictException("El guardián ya ha respondido a las estrellas");
+            throw new ConflictException("El guardián ya ha respondido a las estrellas");
         }
     }
 
