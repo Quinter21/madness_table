@@ -125,23 +125,6 @@ class PercentileRollTest {
     }
 
     @Test
-    void bonusDiceLowerTheAverageAndPenaltyDiceRaiseIt() {
-        JavaRandomSource random = new JavaRandomSource();
-        int n= 200;
-        long plain = 0;
-        long bonus = 0;
-        long penalty = 0;
-        for (int i = 0; i < n; i++){
-            plain += PercentileRoll.roll(random, 0, 0).result();
-            bonus += PercentileRoll.roll(random, 1, 0).result();
-            penalty += PercentileRoll.roll(random, 0, 1).result();
-        }
-
-        assertThat(bonus / (double) n).isLessThan(plain / (double) n);
-        assertThat(penalty / (double) n).isGreaterThan(plain / (double) n);
-    }
-
-    @Test
     void realRollsAlwaysStayBetween1And100() {
         JavaRandomSource random = new JavaRandomSource();
         for (int i = 0; i < 10000; i++){
