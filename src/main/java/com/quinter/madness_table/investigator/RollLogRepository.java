@@ -1,0 +1,10 @@
+package com.quinter.madness_table.investigator;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface RollLogRepository extends JpaRepository<RollLog, Long> {
+
+    List<RollLog> findByInvestigatorIdOrderByCreatedAtDesc(Long investigatorId);
+}
