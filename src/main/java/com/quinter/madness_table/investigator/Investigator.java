@@ -71,6 +71,13 @@ public class Investigator {
         this.luck = luck;
     }
 
+    public void updateDetails(String name, String occupation, int age, String backstory) {
+        this.name = name;
+        this.occupation = occupation;
+        this.age = age;
+        this.backstory = backstory;
+    }
+
     public Long getId() {
         return id;
     }

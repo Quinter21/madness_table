@@ -1,5 +1,6 @@
 package com.quinter.madness_table.investigator;
 
+import com.quinter.madness_table.rules.Attributes;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -36,6 +37,11 @@ public class Characteristics {
         this.intelligence = intelligence;
         this.power = power;
         this.education = education;
+    }
+
+    public Attributes toAttributes() {
+        return new Attributes(strength, constitution, size, dexterity,
+                appearance, intelligence, power, education);
     }
 
     public int getStrength() {
