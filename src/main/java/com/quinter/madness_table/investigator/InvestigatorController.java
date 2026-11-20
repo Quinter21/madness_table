@@ -1,6 +1,7 @@
 package com.quinter.madness_table.investigator;
 
 import com.quinter.madness_table.auth.AuthenticatedUser;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class InvestigatorController {
         this.service = service;
     }
 
+    @Operation(summary = "Crear investigador")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public InvestigatorResponse create(@AuthenticationPrincipal AuthenticatedUser user,
@@ -29,12 +31,14 @@ public class InvestigatorController {
         return service.create(user.id(), campaignId, request);
     }
 
+    @Operation(summary = "Lista de investigadores de la campaña")
     @GetMapping
     public List<InvestigatorResponse> list(@AuthenticationPrincipal AuthenticatedUser user,
                                            @PathVariable Long campaignId) {
         return service.list(user.id(), campaignId);
     }
 
+    @Operation(summary = "Información de un investigador concreto")
     @GetMapping("/{id}")
     public InvestigatorResponse get(@AuthenticationPrincipal AuthenticatedUser user,
                                     @PathVariable Long campaignId,
@@ -42,6 +46,7 @@ public class InvestigatorController {
         return service.get(user.id(), campaignId, id);
     }
 
+    @Operation(summary = "Actualizar la información de un investigador")
     @PutMapping("/{id}")
     public InvestigatorResponse update(@AuthenticationPrincipal AuthenticatedUser user,
                                        @PathVariable Long campaignId,
@@ -50,6 +55,7 @@ public class InvestigatorController {
         return service.update(user.id(), campaignId, id, request);
     }
 
+    @Operation(summary = "Eliminar un investigador")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthenticatedUser user,
