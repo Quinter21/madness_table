@@ -68,4 +68,12 @@ public class CampaignManagementController {
                              @PathVariable Long targetUserId){
         service.removeMember(user.id(), campaignId, targetUserId);
     }
+
+    @Operation(summary = "Eliminar la campaña y todo lo que contiene; solo el guardián tiene permiso")
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCampaign(@AuthenticationPrincipal AuthenticatedUser user,
+                               @PathVariable Long campaignId) {
+        service.deleteCampaign(user.id(), campaignId);
+    }
 }

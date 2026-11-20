@@ -1,9 +1,12 @@
 package com.quinter.madness_table.campaign;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CampaignManagementService {
@@ -92,5 +95,11 @@ public class CampaignManagementService {
     private JoinRequest findRequest(Long campaignId, Long requestId) {
         return joinRequestRepository.findByIdAndCampaignId(requestId, campaignId)
                 .orElseThrow(() -> new ResourceNotFoundException("Solicitud no encontrada"));
+    }
+
+    @Transactional
+    public void deleteCampaign(Long userId, Long campaignId) {
+        CampaignMember guardian = access.requireGuardian(campaignId, userId);
+        campaignRepository.delete(guardian.getCampaign());
     }
 }

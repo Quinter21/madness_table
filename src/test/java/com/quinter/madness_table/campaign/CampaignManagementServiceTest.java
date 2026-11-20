@@ -71,4 +71,23 @@ public class CampaignManagementServiceTest {
         verifyNoInteractions(inviteCodeGenerator);
         verifyNoInteractions(campaignRepository);
     }
+
+    @Test
+    void guardianDeletesTheCampaign() {
+        Campaign campaign = new Campaign("Test", null, "CODE1234", null);
+        CampaignMember guardian = new CampaignMember(campaign, null, CampaignRole.GUARDIAN);
+        when(access.requireGuardian(10L, 1L)).thenReturn(guardian);
+
+        service.deleteCampaign(1L, 10L);
+        verify(campaignRepository).delete(campaign);
+    }
+
+    @Test
+    void playerCannotDeleteTheCampaign() {
+        when(access.requireGuardian(10L, 2L)).thenThrow(new NotGuardianException());
+
+        assertThatThrownBy(() -> service.deleteCampaign(2L, 10L))
+                .isInstanceOf(NotGuardianException.class);
+        verifyNoInteractions(campaignRepository);
+    }
 }

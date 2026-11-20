@@ -11,5 +11,7 @@ public interface CampaignSkillRepository extends JpaRepository<CampaignSkill, Lo
 
     Optional<CampaignSkill> findByIdAndCampaignId(Long id, Long campaignId);
 
+    Optional<CampaignSkill> findByCampaignIdAndNameIgnoreCase(Long campaignId, String name);
+
     boolean existsByCampaignIdAndNameIgnoreCase(Long campaignId, String name);
 }
