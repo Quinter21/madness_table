@@ -2,6 +2,7 @@ package com.quinter.madness_table.investigator;
 
 import com.quinter.madness_table.auth.AuthenticatedUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class RollController {
     public RollResponse roll(@AuthenticationPrincipal AuthenticatedUser user,
                              @PathVariable Long campaignId,
                              @PathVariable Long investigatorId,
-                             RollRequest request) {
+                             @Valid @RequestBody RollRequest request) {
         return service.roll(user.id(), campaignId, investigatorId, request);
     }
 

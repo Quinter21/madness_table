@@ -1,6 +1,6 @@
 package com.quinter.madness_table.auth;
 
-import com.quinter.madness_table.AbstactIntegrationTest;
+import com.quinter.madness_table.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AuthIT extends AbstactIntegrationTest {
+class AuthIT extends AbstractIntegrationTest {
 
     private String uniqueEmail() {
         return "user-" + UUID.randomUUID() + "@example.com";

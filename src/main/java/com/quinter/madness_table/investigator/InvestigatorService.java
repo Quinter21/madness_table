@@ -18,12 +18,14 @@ public class InvestigatorService {
     private final CampaignAccess access;
     private final InvestigatorRepository investigatorRepository;
     private final RandomSource random;
+    private final InvestigatorAccess investigatorAccess;
 
     public InvestigatorService(CampaignAccess access, InvestigatorRepository investigatorRepository,
-                               RandomSource random) {
+                               RandomSource random, InvestigatorAccess investigatorAccess) {
         this.access = access;
         this.investigatorRepository = investigatorRepository;
         this.random = random;
+        this.investigatorAccess = investigatorAccess;
     }
 
     @Transactional
@@ -59,34 +61,19 @@ public class InvestigatorService {
 
     @Transactional(readOnly = true)
     public InvestigatorResponse get(Long userId, Long campaignId, Long investigatorId) {
-        return InvestigatorResponse.from(findInvestigator(userId, campaignId, investigatorId));
+        return InvestigatorResponse.from(investigatorAccess.requireVisible(userId, campaignId, investigatorId));
     }
 
     @Transactional
     public InvestigatorResponse update(Long userId, Long campaignId, Long investigatorId,
                                        UpdateInvestigatorRequest request) {
-        Investigator investigator = findInvestigator(userId, campaignId, investigatorId);
+        Investigator investigator = investigatorAccess.requireVisible(userId, campaignId, investigatorId);
         investigator.updateDetails(request.name().trim(), request.occupation().trim(), request.age(), request.backstory());
         return InvestigatorResponse.from(investigator);
     }
 
     @Transactional
     public void delete (Long userId, Long campaignId, Long investigatorId) {
-        investigatorRepository.delete(findInvestigator(userId, campaignId, investigatorId));
-    }
-
-    private Investigator findInvestigator(Long userId, Long campaignId, Long investigatorId) {
-        CampaignMember member = access.requireMember(campaignId, userId);
-
-        Investigator investigator = investigatorRepository
-                .findByIdAndCampaignId(investigatorId, campaignId)
-                .orElseThrow(() -> new ResourceNotFoundException("Investigador no encontrado"));
-
-        boolean isOwner = investigator.getUser().getId().equals(userId);
-        if (!isOwner && member.getRole() != CampaignRole.GUARDIAN) {
-            //TODO: Devuelve el investigador pero solo los campos públicos
-            throw new ResourceNotFoundException("Investigador no encontrado");
-        }
-        return investigator;
+        investigatorRepository.delete(investigatorAccess.requireVisible(userId, campaignId, investigatorId));
     }
 }

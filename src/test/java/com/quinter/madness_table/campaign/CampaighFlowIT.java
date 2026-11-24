@@ -1,6 +1,6 @@
 package com.quinter.madness_table.campaign;
 
-import com.quinter.madness_table.AbstactIntegrationTest;
+import com.quinter.madness_table.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CampaighFlowIT extends AbstactIntegrationTest {
+class CampaighFlowIT extends AbstractIntegrationTest {
 
     private JoinRequestResponse requestToJoin(TestUser user, String inviteCode) {
         ResponseEntity<JoinRequestResponse> response = post("/api/campaigns/join",

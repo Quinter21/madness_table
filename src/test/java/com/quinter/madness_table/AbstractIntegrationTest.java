@@ -6,22 +6,24 @@ import com.quinter.madness_table.auth.TokenResponse;
 import com.quinter.madness_table.auth.UserResponse;
 import com.quinter.madness_table.campaign.CampaignResponse;
 import com.quinter.madness_table.campaign.CreateCampaignRequest;
+import com.quinter.madness_table.campaign.JoinCampaignRequest;
+import com.quinter.madness_table.campaign.JoinRequestResponse;
+import com.quinter.madness_table.investigator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestRestTemplate
 @Import(TestcontainersConfiguration.class)
-public abstract class AbstactIntegrationTest {
+public abstract class AbstractIntegrationTest {
 
     protected static final String PASSWORD = "ClaveSegura123";
 
@@ -49,12 +51,45 @@ public abstract class AbstactIntegrationTest {
                 CampaignResponse.class).getBody();
     }
 
+    protected TestUser createPlayerInCampaign(TestUser guardian, CampaignResponse campaign, String name) {
+        TestUser player = createUser(name);
+        JoinRequestResponse request = post("/api/campaigns/join", player.token(),
+                new JoinCampaignRequest(campaign.inviteCode()), JoinRequestResponse.class).getBody();
+
+        ResponseEntity<String> approved = post(
+                "/api/campaigns/" + campaign.id() + "/requests/" + request.id() + "/approve",
+                guardian.token(), null, String.class);
+
+        assertThat(approved.getStatusCode()).isEqualTo(HttpStatus.OK);
+        return player;
+    }
+
+    protected InvestigatorResponse createInvestigator(TestUser owner, Long campaignId, String name) {
+        ResponseEntity<InvestigatorResponse> response = post("/api/campaigns/" + campaignId + "/investigators",
+                owner.token(), new CreateInvestigatorRequest(name, "Detective", 16, "Blablabla",
+                        new CharacteristicsDto(50, 50, 50, 50,
+                                50, 50, 50, 50)), InvestigatorResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        return response.getBody();
+    }
+
+    protected SkillResponse createSkill(TestUser guardian, Long campaignId, String name, int baseValue) {
+        ResponseEntity<SkillResponse> response = post("/api/campaigns/" + campaignId + "/skills",
+                guardian.token(), new SkillRequest(name, baseValue), SkillResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        return response.getBody();
+    }
+
     protected <T> ResponseEntity<T> get(String url, String token, Class<T> type) {
         return send(HttpMethod.GET, url, token, null, type);
     }
 
     protected <T> ResponseEntity<T> post(String url, String token, Object body, Class<T> type) {
         return send(HttpMethod.POST, url, token, body, type);
+    }
+
+    protected <T> ResponseEntity<T> put(String url, String token, Object body, Class<T> type) {
+        return send(HttpMethod.PUT, url, token, body, type);
     }
 
     protected <T> ResponseEntity<T> delete(String url, String token, Class<T> type) {

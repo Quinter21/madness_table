@@ -31,7 +31,7 @@ public class CampaignSkillController {
 
     @Operation(summary = "Crear una nueva habilidad; solo el guardián tiene permiso")
     @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.CREATED)
     public SkillResponse create(@AuthenticationPrincipal AuthenticatedUser user,
                                 @PathVariable Long campaignId,
                                 @Valid @RequestBody SkillRequest request) {
